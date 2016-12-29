@@ -11,6 +11,7 @@
 		8E1BD6271E123F1200C137F4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E1BD6251E123F1200C137F4 /* Main.storyboard */; };
 		8E1BD6291E123F1200C137F4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E1BD6281E123F1200C137F4 /* Assets.xcassets */; };
 		8E1BD62C1E123F1200C137F4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E1BD62A1E123F1200C137F4 /* LaunchScreen.storyboard */; };
+		8E3B595D1E14916500B5AAB8 /* MainVCSettings.json in Resources */ = {isa = PBXBuildFile; fileRef = 8E3B595C1E14916500B5AAB8 /* MainVCSettings.json */; };
 		8E40CF8C1E1260DD00100167 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E40CF8B1E1260DD00100167 /* MainViewController.swift */; };
 		8E40CF8E1E12631C00100167 /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E40CF8D1E12631C00100167 /* MessageViewController.swift */; };
 		8E40CF901E12632F00100167 /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E40CF8F1E12632F00100167 /* DiscoverViewController.swift */; };
@@ -25,6 +26,7 @@
 		8E1BD6281E123F1200C137F4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8E1BD62B1E123F1200C137F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8E1BD62D1E123F1200C137F4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8E3B595C1E14916500B5AAB8 /* MainVCSettings.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = MainVCSettings.json; sourceTree = "<group>"; };
 		8E40CF8B1E1260DD00100167 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		8E40CF8D1E12631C00100167 /* MessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
 		8E40CF8F1E12632F00100167 /* DiscoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
@@ -67,9 +69,18 @@
 				8E1BD6251E123F1200C137F4 /* Main.storyboard */,
 				8E1BD6281E123F1200C137F4 /* Assets.xcassets */,
 				8E1BD62A1E123F1200C137F4 /* LaunchScreen.storyboard */,
+				8E3B595B1E14916500B5AAB8 /* Resource */,
 				8E1BD62D1E123F1200C137F4 /* Info.plist */,
 			);
 			path = Weibo;
+			sourceTree = "<group>";
+		};
+		8E3B595B1E14916500B5AAB8 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				8E3B595C1E14916500B5AAB8 /* MainVCSettings.json */,
+			);
+			path = Resource;
 			sourceTree = "<group>";
 		};
 		8E40CF851E125D4500100167 /* Classes */ = {
@@ -185,6 +196,7 @@
 			files = (
 				8E1BD62C1E123F1200C137F4 /* LaunchScreen.storyboard in Resources */,
 				8E1BD6291E123F1200C137F4 /* Assets.xcassets in Resources */,
+				8E3B595D1E14916500B5AAB8 /* MainVCSettings.json in Resources */,
 				8E1BD6271E123F1200C137F4 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

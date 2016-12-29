@@ -13,16 +13,53 @@ class MainViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        addChildViewController(childVc: HomeViewController(), title: "首页", imageName: "tabbar_home")
-        addChildViewController(childVc: MessageViewController(), title: "消息", imageName: "tabbar_message_center")
-        addChildViewController(childVc: ProfileViewController(), title: "我", imageName: "tabbar_profile")
-        addChildViewController(childVc: DiscoverViewController(), title: "发现", imageName: "tabbar_discover")
+        guard let path = Bundle.main.path(forResource: "MainVCSettings.json", ofType: nil) else {
+            return
+        }
+        
+        guard let jsonData = NSData(contentsOfFile: path) else {
+            return
+        }
+        
+        guard let anyObject = try? JSONSerialization.jsonObject(with: jsonData as Data, options: .mutableContainers) else {
+            return
+        }
+        
+        guard let dictArray = anyObject as? [[String : AnyObject]] else {
+            return
+        }
+        
+        for dict in dictArray {
+            guard let vcName = dict["vcName"] as? String else {
+                continue
+            }
+            guard let title = dict["title"] as? String else {
+                continue
+            }
+            guard let imageName = dict["imageName"] as? String else {
+                continue
+            }
+            addChildViewController(childVcName: vcName, title: title, imageName: imageName)
+        }
         
     }
 
 
-    private func addChildViewController(childVc: UIViewController, title: String, imageName: String) {
+    private func addChildViewController(childVcName: String, title: String, imageName: String) {
         
+        guard let nameSpace = Bundle.main.infoDictionary!["CFBundleExecutable"] as? String else {
+            return
+        }
+        
+        guard let childVcClass = NSClassFromString(nameSpace + "." + childVcName) else {
+            return
+        }
+        
+        guard let childVcType = childVcClass as? UIViewController.Type else {
+            return
+        }
+        
+        let childVc = childVcType.init()
         childVc.title = title
         childVc.tabBarItem.image = UIImage(named: imageName)
         childVc.tabBarItem.selectedImage = UIImage(named: imageName + "_highlighted")
