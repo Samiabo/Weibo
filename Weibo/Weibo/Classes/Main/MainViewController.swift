@@ -10,9 +10,10 @@ import UIKit
 
 class MainViewController: UITabBarController {
 
+    lazy var addBtn: UIButton = UIButton(imageName: "tabbar_compose_icon_add", bgImageName: "tabbar_compose_button")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
         guard let path = Bundle.main.path(forResource: "MainVCSettings.json", ofType: nil) else {
             return
         }
@@ -41,7 +42,7 @@ class MainViewController: UITabBarController {
             }
             addChildViewController(childVcName: vcName, title: title, imageName: imageName)
         }
-        
+        setupUI()
     }
 
 
@@ -60,6 +61,7 @@ class MainViewController: UITabBarController {
         }
         
         let childVc = childVcType.init()
+
         childVc.title = title
         childVc.tabBarItem.image = UIImage(named: imageName)
         childVc.tabBarItem.selectedImage = UIImage(named: imageName + "_highlighted")
@@ -67,4 +69,25 @@ class MainViewController: UITabBarController {
         addChildViewController(childNav)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupTabBar()        
+    }
+    
+}
+
+extension MainViewController {
+    func setupUI() {
+        tabBar.addSubview(addBtn)        
+        addBtn.center = CGPoint(x: tabBar.center.x, y: tabBar.bounds.size.height * 0.5)
+    }
+    func setupTabBar() {
+        for i in 0..<childViewControllers.count {
+            if i == 2 {
+                let vc = childViewControllers[i]
+                vc.tabBarItem.isEnabled = false
+                return
+            }
+        }
+    }
 }
