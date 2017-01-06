@@ -15,7 +15,7 @@ private let itemMargin: CGFloat = 10
 class StatusViewCell: UITableViewCell {
 
     @IBOutlet weak var contentLabelWidthCons: NSLayoutConstraint!
-    
+    @IBOutlet weak var bgView: UIView!
     @IBOutlet weak var iconView: UIImageView!
     @IBOutlet weak var verifiedView: UIImageView!
     @IBOutlet weak var screenNameLabel: UILabel!
@@ -23,11 +23,13 @@ class StatusViewCell: UITableViewCell {
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var sourceLabel: UILabel!
     @IBOutlet weak var contentLabel: UILabel!
-    
     @IBOutlet weak var retweetedContentL: UILabel!
     @IBOutlet weak var picView: PicCollectionView!
     @IBOutlet weak var picViewHeightCons: NSLayoutConstraint!
     @IBOutlet weak var picViewWidthCons: NSLayoutConstraint!
+    @IBOutlet weak var picViewBottomCons: NSLayoutConstraint!
+    @IBOutlet weak var retweetedContentLTopCons: NSLayoutConstraint!
+    
     var viewModel:StatusViewModel? {
         didSet {
             guard let viewModel = viewModel else {
@@ -40,7 +42,12 @@ class StatusViewCell: UITableViewCell {
             screenNameLabel.text = viewModel.status?.user?.screen_name
             vipView.image = viewModel.vipImage
             timeLabel.text = viewModel.createAtText
-            sourceLabel.text = viewModel.sourceText
+            if let sourceText = viewModel.sourceText {
+                sourceLabel.text = "from" + sourceText
+            } else {
+                sourceLabel.text = nil
+            }
+            
             contentLabel.text = viewModel.status?.text
             screenNameLabel.textColor = viewModel.vipImage == nil ? UIColor.black : UIColor.orange
             let picViewSize = calculate(picCount: viewModel.picURLs.count)
@@ -50,11 +57,14 @@ class StatusViewCell: UITableViewCell {
             if viewModel.status?.retweeted_status != nil {
                 if let screenName = viewModel.status?.retweeted_status?.user?.screen_name, let retweetedText = viewModel.status?.retweeted_status?.text {
                     retweetedContentL.text = "@" + screenName + ":" + retweetedText
+                    bgView.isHidden = false
+                    retweetedContentLTopCons.constant = 15
                 }
-
                 
             } else {
+                retweetedContentLTopCons.constant = 0
                 retweetedContentL.text = nil
+                bgView.isHidden = true
             }
         }
     }
@@ -78,11 +88,12 @@ extension StatusViewCell {
     func calculate(picCount: Int) -> CGSize {
         //no pic, 1 pic, 4 pics, other
         if picCount == 0 {
+            picViewBottomCons.constant = 0
             return .zero
         }
         
+        picViewBottomCons.constant = 10
         let layout = picView.collectionViewLayout as! UICollectionViewFlowLayout
-        
         
         if picCount == 1 {
             let image = SDWebImageManager.shared().imageCache.imageFromDiskCache(forKey: viewModel?.picURLs.last?.absoluteString)

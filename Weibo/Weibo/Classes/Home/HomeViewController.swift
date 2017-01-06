@@ -8,6 +8,7 @@
 
 import UIKit
 import SDWebImage
+import MJRefresh
 
 class HomeViewController: BaseViewController {
 
@@ -29,9 +30,11 @@ class HomeViewController: BaseViewController {
         tableView.separatorStyle = .none
         tableView.register(UINib(nibName: "StatusViewCell", bundle: nil), forCellReuseIdentifier: "homecellid")
         setupNavigationBar()
-        loadStatuses()
+        loadStatuses(isNew: false)
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 200
+        setupHeader()
+        setupFooter()
     }
 
     override func didReceiveMemoryWarning() {
@@ -52,6 +55,19 @@ extension HomeViewController {
         titleBtn.addTarget(self, action: #selector(HomeViewController.titleBtnClick), for: .touchUpInside)
         navigationItem.titleView = titleBtn
     }
+    
+    func setupHeader() {
+        let header = MJRefreshNormalHeader(refreshingTarget: self, refreshingAction: #selector(HomeViewController.loadNewStatus))
+        header?.setTitle("下拉刷新", for: .idle)
+        header?.setTitle("释放更新", for: .pulling)
+        header?.setTitle("加载中...", for: .refreshing)
+        tableView.mj_header = header
+        tableView.mj_header.beginRefreshing()
+    }
+    
+    func setupFooter() {
+        tableView.mj_footer = MJRefreshAutoFooter(refreshingTarget: self, refreshingAction: #selector(HomeViewController.loadMoreStatus))
+    }
 }
 
 // MARK: - 事件监听函数
@@ -68,8 +84,19 @@ extension HomeViewController {
 
 // MARK: - 请求数据
 extension HomeViewController {
-    func loadStatuses() {
-        NetworkTools.shareInstance.loadStatus { (result, error) in
+    
+    func loadStatuses(isNew: Bool) {
+        var since_id = 0
+        var max_id = 0
+        
+        if isNew {
+            since_id = viewModels.first?.status?.mid ?? 0
+        } else {
+            max_id = viewModels.last?.status?.mid ?? 0
+            max_id = max_id == 0 ? 0 : (max_id - 1)
+        }
+        
+        NetworkTools.shareInstance.loadStatus(since_id: since_id, max_id: max_id) {(result, error) -> () in
             if error != nil {
                 print(error!)
                 return
@@ -77,12 +104,21 @@ extension HomeViewController {
             guard let statusArr = result else {
                 return
             }
+            var tempViewModels = [StatusViewModel]()
+            
             for statusDict in statusArr {
                 let status = StatusModel(dict: statusDict)
                 let viewModel = StatusViewModel(status: status)
-                self.viewModels.append(viewModel)
+                tempViewModels.append(viewModel)
             }
-            self.cacheImages(viewModels: self.viewModels)
+            
+            if isNew {
+                self.viewModels = tempViewModels + self.viewModels
+            } else {
+                self.viewModels += tempViewModels
+            }
+            
+            self.cacheImages(viewModels: tempViewModels)
         }
     }
     
@@ -98,7 +134,17 @@ extension HomeViewController {
         }
         group.notify(queue: DispatchQueue.main, work: DispatchWorkItem(block: {
             self.tableView.reloadData()
+            self.tableView.mj_header.endRefreshing()
+            self.tableView.mj_footer.endRefreshing()
         }))
+    }
+    
+    func loadNewStatus() {
+        loadStatuses(isNew: true)
+    }
+    
+    func loadMoreStatus() {
+        loadStatuses(isNew: false)
     }
 }
 

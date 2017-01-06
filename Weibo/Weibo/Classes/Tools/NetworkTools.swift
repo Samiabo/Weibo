@@ -70,9 +70,9 @@ extension NetworkTools {
 
 // MARK: - 请求微博
 extension NetworkTools {
-    func loadStatus(finished: @escaping (_ result: [[String: AnyObject]]?, _ error: Error?) -> ()) {
+    func loadStatus(since_id: Int, max_id: Int, finished: @escaping (_ result: [[String: AnyObject]]?, _ error: Error?) -> ()) {
         let urlString = "https://api.weibo.com/2/statuses/home_timeline.json"
-        let params = ["access_token": UserAccountTool.shareInstance.account?.access_token]
+        let params = ["access_token": UserAccountTool.shareInstance.account?.access_token!, "since_id": "\(since_id)", "max_id": "\(max_id)"]
         request(type: .GET, urlString: urlString, params: params as [String : AnyObject]) {(result, error) -> () in
             guard let resultDict = result as? [String: AnyObject] else {
                 finished(nil, error)
