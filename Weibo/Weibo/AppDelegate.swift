@@ -12,13 +12,18 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var defaultController: UIViewController? {
+        let isLogin = UserAccountTool.shareInstance.isLogin
+        return isLogin ? WelcomeViewController() : MainViewController()
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
         UITabBar.appearance().tintColor = UIColor.orange
+        UINavigationBar.appearance().tintColor = UIColor.orange
         // Override point for customization after application launch.
         window = UIWindow.init(frame: UIScreen.main.bounds)
-        window?.rootViewController = MainViewController()
+        window?.rootViewController = defaultController
         window?.makeKeyAndVisible()
         return true
     }

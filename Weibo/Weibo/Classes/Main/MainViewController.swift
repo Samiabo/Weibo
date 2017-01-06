@@ -78,8 +78,9 @@ class MainViewController: UITabBarController {
 
 extension MainViewController {
     func setupUI() {
-        tabBar.addSubview(addBtn)        
+        tabBar.addSubview(addBtn)
         addBtn.center = CGPoint(x: tabBar.center.x, y: tabBar.bounds.size.height * 0.5)
+        addBtn.addTarget(self, action: #selector(MainViewController.addBtnClick), for: .touchUpInside)
     }
     func setupTabBar() {
         for i in 0..<childViewControllers.count {
@@ -91,3 +92,32 @@ extension MainViewController {
         }
     }
 }
+
+
+
+extension MainViewController {
+    func addBtnClick() {
+        LSLog(message: "click addBtn")
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
